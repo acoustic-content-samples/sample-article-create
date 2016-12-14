@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Watson Content Hub Create Article</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+</head>
+
+<body class="container">
+    <div class="text-left" style="padding-bottom: 10px;">
+        <h2 class="color-a">Watson Content Hub Create Article Sample</h2>
+    </div>
+    <form id="sample-create-form">
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <label for="sample-create-title" class="col-form-label">Title</label>
+            </div>
+            <div class="col-xs-10">
+                <input class="form-control" type="text" value="" name="title" id="sample-create-title">
+                </input>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <label for="sample-create-summary" class="col-form-label">Summary</label>
+            </div>
+            <div class="col-xs-10">
+                <input class="form-control" type="text" value="" name="summary" id="sample-create-summary">
+                </input>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <label for="sample-create-author" class="col-form-label">Author</label>
+            </div>
+            <div class="col-xs-10">
+                <input class="form-control" type="text" value="" name="author" id="sample-create-author">
+                </input>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <label for="sample-create-body" class="col-form-label">Body</label>
+            </div>
+            <div class="col-xs-10">
+                <textarea class="form-control" rows="5" type="text" value="" name="body" id="sample-create-body"></textarea>
+            </div>
+        </div>
+    </form>
+    <div class="form-group row">
+        <div class="col-xs-2">
+            <label for="sample-create-body" class="col-form-label">Image</label>
+        </div>
+        <div class="col-xs-10">
+            <div>
+                <form id="fileForm" enctype="multipart/form-data">
+                    <input id="sample-create-image" name="file" type="file" />
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-10">
+            <button onclick="doUpload();" class="btn btn-primary" data-toggle="modal">Create Article</button>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-10">
+            <p id="sample-message"></p>
+        </div>
+    </div>
+    <script>
+    function doUpload() {
+        var selectedFile = document.getElementById('sample-create-image').files[
+            0];
+        var array = $('#sample-create-form').serializeArray();
+        var json = {};
+
+        $.each(array, function() {
+            json[this.name] = this.value || '';
+        });
+        // Set "name" same as title
+        var contentName = json["title"];
+        console.log(JSON.stringify(json));
+        createContentItem('article', contentName, selectedFile, json)
+            .then(function(json) {
+                console.log('done: ', json);
+                $("#sample-message").text("Success");
+            })
+            .catch(function(e) {
+              if (e.statusText) {
+                e = e.statusText;
+              }
+              $("#sample-message").text('Error ' + e);
+            });
+    }
+    </script>
+</body>
+
+</html>
