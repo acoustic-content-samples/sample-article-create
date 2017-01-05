@@ -77,17 +77,17 @@ function createContentItem(contentTypeName, contentName, file, textData) {
             return wchCreateAssetFromResource(id, file.name);
         })
         .then(function(assetJson) {
-            // console.log("asset: ", assetJson);
+            console.log("asset: ", assetJson);
             // set image properties in contentElements
             var image = elements.image;
             image.elementType = "image";
-            image.renditions = assetJson.renditions;
-            image.asset = {};
-            image.asset.id = assetJson.id;
-            image.asset.resourceUri = assetJson.renditions["default"].source;
-            image.asset.fileName = assetJson.fileName;
-            image.asset.fileSize = assetJson.fileSize;
-            image.asset.mediaType = assetJson.mediaType;
+            image.asset = {
+                id: assetJson.id
+            };
+            image.renditions["default"] = {
+                    renditionId: assetJson.renditions["default"].id
+            };
+
             // 4. search for content type by name
             var searchParams = "q=*:*&fl=name,id&wt=json&fq=classification:content-type&fq=name:" + contentTypeName;
             return wchSearch(searchParams);
