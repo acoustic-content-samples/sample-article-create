@@ -59,7 +59,7 @@ Creating a new image (or other file) asset in WCH is a two-step process: first t
 Once the image asset is created, the returned JSON can be used in building the element data that is used when creating a content item.
 
 ####Building the elements data for the new content item
-In this example, there is a hard-coded "emptyElements" structure that matches the fields and element types that the Article content type expects. Alternatively you could use the authoring/v1/types/{id}/schema API to retrieve a Json-Schema for a content type and generate the element structure dynamically.
+In this example, there is a hard-coded "emptyElements" structure that matches the fields and element types that the Article content type expects.
 
 ####Using the helper functions for the steps in creating the content item
 The individual API calls used in this example are broken out into separate reusable functions so that you could use them in different ways.
