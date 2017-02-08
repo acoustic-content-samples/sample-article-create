@@ -22,22 +22,11 @@ This sample uses hard-coded user name and password set in the app.js file. Updat
 
 To avoid putting credentials in the source you could change the application to provide browser inputs for username and password.
 
-####3. Create the "Article" content type
+#### 3. Create the "Article" content type
 
-This application requires that you have an "Article" content type available. This is the same content type used in these other samples:
-- https://github.com/ibm-wch/sample-article-angular
-- https://github.com/ibm-wch/sample-article-carousel
+This application uses an "Article" content type that must be created for your tenant prior to running the sample the first time. 
 
-To create the Article content type, in the WCH user interface, under Content Model, Types, create an Article content type with the following elements. To set the "custom display" values, click on the little gear icon for the element.
-
-|Element name | Element type | Element custom display settings |
-| --- | --- | --- |
-|Title | Text | (none) |
-| Summary | Text | (none) |
-| Author | Text | (none) |
-| Body | Text | Multi line, Field width 100, Field height 10 |
-| Image | Image | (none) |
-| Publish Date | Date (Field type "Single date") | (none) |
+Follow the instructions at the [sample-article-content](https://github.com/ibm-wch/sample-article-content) repository, to download and push the sample article type and associated authoring artifacts, for your content hub tenant.
 
 #### 4. Enable CORS support for your tenant
 
