@@ -10,8 +10,10 @@
 
 "use strict";
 
-// Base URLs and endpoints
-const wchLoginApiGateway = "https://my.digitalexperience.ibm.com/api/";
+// Base URL for APIs - replace {Host} and {Tenant ID} using the values available 
+// from the "i" information icon at the top left of the WCH screen 
+const baseTenantUrl = "https://{Host}/api/{Tenant ID}";
+
 // Content Hub blueid username and password - replace these or add code to get these from inputs
 const username = "[username]";
 const password = "[password]";
@@ -48,13 +50,11 @@ var emptyElements = {
     }
 };
 
-const wchLoginURL = wchLoginApiGateway + "login/v1/basicauth";
+const wchLoginURL = baseTenantUrl + "/login/v1/basicauth";
 const contentService = "authoring/v1/content";
 const resourceService = "authoring/v1/resources";
 const assetService = "authoring/v1/assets";
 const searchService = "authoring/v1/search";
-
-var baseTenantUrl;
 
 // Login, upload resource, create asset, and create content item
 function createContentItem(contentTypeName, contentName, file, textData) {
@@ -65,8 +65,7 @@ function createContentItem(contentTypeName, contentName, file, textData) {
     }
     // 1. login
     return wchLogin(username, password)
-        .then(function(baseUrl) {
-            baseTenantUrl = baseUrl; // save this for other calls
+        .then(function() {
             // 2. Upload resource and create asset
             return wchCreateResource(file);
         })
@@ -77,7 +76,7 @@ function createContentItem(contentTypeName, contentName, file, textData) {
             return wchCreateAssetFromResource(id, file.name);
         })
         .then(function(assetJson) {
-            console.log("asset: ", assetJson);
+            // console.log("asset: ", assetJson);
             // set image properties in contentElements
             var image = elements.image;
             image.elementType = "image";
@@ -120,11 +119,11 @@ function wchLogin(user, pass) {
     };
     // Call login
     return $.ajax(requestOptions).then(function(data, textStatus, request) {
-        return request.getResponseHeader('x-ibm-dx-tenant-base-url'); // use this to get tenant from the basicauth call
+        return "";
     });
 }
 
-// Upload a file to create a resource. baseTenantUrl must already be set
+// Upload a file to create a resource. Must have done login already.
 function wchCreateResource(file) {
     var createResourceUrl = baseTenantUrl + '/' + resourceService + "?name=" + file.name;
     return new Promise(function(resolve, reject) {
