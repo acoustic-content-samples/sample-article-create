@@ -16,11 +16,14 @@ This screenshot shows the completed form for a new Article:
 
 Download the application files (html, js, and css) from the 'public' folder into any folder on your workstation.
 
-#### 2. Update the user credentials
+#### 2. Update the user credentials and baseTenantUrl
 
-This sample uses hard-coded user name and password set in the app.js file. Update the name and password values in that file.
+This sample uses a hard-coded user name and password set in the app.js file. Update the name and password values in that file. To avoid putting credentials in the source you could change the application to provide browser inputs for username and password.
 
-To avoid putting credentials in the source you could change the application to provide browser inputs for username and password.
+The baseTenantUrl variable in app.js must also be set for your tenant. In the IBM Watson Content Hub user interface, click the "i" information icon at the top left of the screen next to where it says IBM Watson Content Hub. The pop-up window shows your host and tenant ID. Use this information to update the value of baseTenantUrl. For example it might look something like this:
+
+const baseTenantUrl = "https://my12.digitalexperience.ibm.com/api/12345678-9abc-def0-1234-56789abcdef0";
+
 
 #### 3. Create the "Article" content type
 
