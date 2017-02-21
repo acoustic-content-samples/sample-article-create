@@ -14,7 +14,24 @@
     <div class="text-left" style="padding-bottom: 10px;">
         <h2 class="color-a">Watson Content Hub Create Article Sample</h2>
     </div>
-    <form id="sample-create-form">
+
+    <div class="container loginContainer">
+        <h3 class="text-center">Login to the Watson Content Hub</h3>
+        <table class="container" style="width:50%">
+            <tr>
+                <td><label>Username:</label></td>
+                <td><input name="username" id="username" type="TEST" class="input-lg" value=""></td>
+            </tr>
+            <tr>
+                <td><label>Password:</label></td>
+                <td><input name="password" id="password" type="PASSWORD" class="input-lg" value=""></td>
+            </tr>
+            <tr><td colspan="2"><button id="dologin" class="btn">Login</button><br/></td></tr>
+        </table>
+    </div>
+
+    <div class="mainContainer hidden">
+      <form id="sample-create-form">
         <div class="form-group row">
             <div class="col-xs-2">
                 <label for="sample-create-title" class="col-form-label">Title</label>
@@ -50,8 +67,8 @@
                 <textarea class="form-control" rows="5" type="text" value="" name="body" id="sample-create-body"></textarea>
             </div>
         </div>
-    </form>
-    <div class="form-group row">
+      </form>
+      <div class="form-group row">
         <div class="col-xs-2">
             <label for="sample-create-body" class="col-form-label">Image</label>
         </div>
@@ -62,20 +79,33 @@
                 </form>
             </div>
         </div>
-    </div>
-    <div class="form-group row">
+      </div>
+      <div class="form-group row">
         <div class="col-xs-2"></div>
         <div class="col-xs-10">
             <button onclick="doUpload();" class="btn btn-primary" data-toggle="modal">Create Article</button>
         </div>
-    </div>
-    <div class="form-group row">
+      </div>
+      <div class="form-group row">
         <div class="col-xs-2"></div>
         <div class="col-xs-10">
             <p id="sample-message"></p>
         </div>
+      </div>
     </div>
+
     <script>
+      document.getElementById("dologin").addEventListener("click", function(){
+        username = document.getElementById("username").value;
+        password = document.getElementById("password").value;
+        wchLogin(username, password,
+          function() { // On successful login hide login form, show UI
+              $(".loginContainer").addClass("hidden");
+              $(".mainContainer").removeClass("hidden");
+          }
+        );
+      });
+
     function doUpload() {
         var selectedFile = document.getElementById('sample-create-image').files[
             0];

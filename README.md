@@ -3,7 +3,7 @@ This is a sample of a custom web application for creating new "Article" content 
 
 This sample shows:
 * Authenticating to the Watson Content Hub and calling APIs that require authentication.
-* Using the authoring services for resources, assets, and content to upload a resource, create an asset, and create an "Article" content item that includes the image. 
+* Using the authoring services for resources, assets, and content to upload a resource, create an asset, and create an "Article" content item that includes the image.
 
 This sample can be used to create new articles that will be displayed in this earlier sample: https://github.com/ibm-wch/sample-article-carousel
 
@@ -16,18 +16,16 @@ This screenshot shows the completed form for a new Article:
 
 Download the application files (html, js, and css) from the 'public' folder into any folder on your workstation.
 
-#### 2. Update the user credentials and baseTenantUrl
+#### 2. Update the baseTenantUrl
 
-This sample uses a hard-coded user name and password set in the app.js file. Update the name and password values in that file. To avoid putting credentials in the source you could change the application to provide browser inputs for username and password.
-
-The baseTenantUrl variable in app.js must also be set for your tenant. In the IBM Watson Content Hub user interface, click the "i" information icon at the top left of the screen next to where it says IBM Watson Content Hub. The pop-up window shows your host and tenant ID. Use this information to update the value of baseTenantUrl. For example it might look something like this:
+The baseTenantUrl variable in app.js must be set for your tenant. In the IBM Watson Content Hub user interface, click the "i" information icon at the top left of the screen next to where it says IBM Watson Content Hub. The pop-up window shows your host and tenant ID. Use this information to update the value of baseTenantUrl. For example it might look something like this:
 
 const baseTenantUrl = "https://my12.digitalexperience.ibm.com/api/12345678-9abc-def0-1234-56789abcdef0";
 
 
 #### 3. Create the "Article" content type
 
-This application uses an "Article" content type that must be created for your tenant prior to running the sample the first time. 
+This application uses an "Article" content type that must be created for your tenant prior to running the sample the first time.
 
 Follow the instructions at the [sample-article-content](https://github.com/ibm-wch/sample-article-content) repository, to download and push the sample article type and associated authoring artifacts, for your content hub tenant.
 
@@ -38,6 +36,8 @@ For this scenario you will need to enable CORS support for your tenant. To contr
 #### 5. Load index.html in a browser
 
 You can do this right from the file system in Firefox, Chrome, or Safari browsers. Alternatively you can make the files available on any web server and open index.html in a browser using your web server URL.
+
+When prompted for a username and password,  you must use an IBM id for a user associated with the Watson Content Hub tenant specified in the above baseTenantUrl.
 
 ###Implementation notes
 
@@ -80,4 +80,3 @@ API Explorer reference documentation: https://developer.ibm.com/api/view/id-618
 Watson Content Hub developer center: https://developer.ibm.com/wch/
 
 Watson Content Hub forum: https://developer.ibm.com/answers/smartspace/wch/
-
