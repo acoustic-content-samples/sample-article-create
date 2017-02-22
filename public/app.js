@@ -10,13 +10,9 @@
 
 "use strict";
 
-// Base URL for APIs - replace {Host} and {Tenant ID} using the values available 
-// from the "i" information icon at the top left of the WCH screen 
+// Base URL for APIs - replace {Host} and {Tenant ID} using the values available
+// from the "i" information icon at the top left of the WCH screen
 const baseTenantUrl = "https://{Host}/api/{Tenant ID}";
-
-// Content Hub blueid username and password - replace these or add code to get these from inputs
-const username = "[username]";
-const password = "[password]";
 
 // Empty elements for Article content type
 var emptyElements = {
@@ -56,6 +52,22 @@ const resourceService = "authoring/v1/resources";
 const assetService = "authoring/v1/assets";
 const searchService = "authoring/v1/search";
 
+function wchLogin(username, password, cb) {
+    //alert("U: " + username + " P: " + password + " URL: " + wchLoginURL);
+    var requestOptions = {
+        xhrFields: { withCredentials: true },
+        url: wchLoginURL,
+        headers: { "Authorization": "Basic " + btoa(username + ":" + password) }
+    };
+    $.ajax(requestOptions).done(function(data, textStatus, request) {
+        cb();
+    }).fail(function(request, textStatus, err) {
+        let errMsg = (request && request.responseJSON && request.responseJSON.errors && request.responseJSON.errors[0].message) ?
+            request.responseJSON.errors[0].message : err;
+        alert("Content Hub Login returned an error: " + errMsg + " Please Try Again.");
+    });
+}
+
 // Login, upload resource, create asset, and create content item
 function createContentItem(contentTypeName, contentName, file, textData) {
     // start with a copy of the empty elements structure for article content type
@@ -63,12 +75,7 @@ function createContentItem(contentTypeName, contentName, file, textData) {
     if (!file) {
         return Promise.reject('No image file specified');
     }
-    // 1. login
-    return wchLogin(username, password)
-        .then(function() {
-            // 2. Upload resource and create asset
-            return wchCreateResource(file);
-        })
+    return wchCreateResource(file) // Upload resource and create asset
         .then(function(resourceJson) {
             var id = resourceJson.id;
             // console.log("resource: ", resourceJson);
@@ -106,22 +113,6 @@ function createContentItem(contentTypeName, contentName, file, textData) {
         });
 };
 
-// Call login - callback has baseURL argument
-function wchLogin(user, pass) {
-    var requestOptions = {
-        xhrFields: {
-            withCredentials: true
-        },
-        url: wchLoginURL,
-        headers: {
-            "Authorization": "Basic " + btoa(user + ":" + pass)
-        }
-    };
-    // Call login
-    return $.ajax(requestOptions).then(function(data, textStatus, request) {
-        return "";
-    });
-}
 
 // Upload a file to create a resource. Must have done login already.
 function wchCreateResource(file) {
@@ -165,7 +156,7 @@ function wchCreateAssetFromResource(resourceId, filename) {
         type: "POST",
         data: JSON.stringify({ resource: resourceId, path: '/dxdam/' + filename, name: filename }),
         contentType: "application/json",
-        // mediaType: mimeType,                
+        // mediaType: mimeType,
         url: createAssetUrl
     };
     // Post to assets service
