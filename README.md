@@ -16,11 +16,11 @@ This screenshot shows the completed form for a new Article:
 
 Download the application files (html, js, and css) from the 'public' folder into any folder on your workstation.
 
-#### 2. Update the baseTenantUrl
+#### 2. Update the baseTenantAPIURL
 
-The baseTenantUrl variable in app.js must be set for your tenant. In the IBM Watson Content Hub user interface, click the "i" information icon at the top left of the screen next to where it says IBM Watson Content Hub. The pop-up window shows your host and tenant ID. Use this information to update the value of baseTenantUrl. For example it might look something like this:
+The baseTenantAPIURL variable in app.js must be set for your tenant. In the IBM Watson Content Hub user interface, open the user menu from the top navigation bar, then select "Hub information". The pop-up window shows your API URL, host and content hub ID for your Watson Content Hub tenant. Use this information to update the value of the baseTenantAPIURL variable in js/app.js, in the form https://{host}/api/{content hub tenant id}. For example it might look something like this:
 
-const baseTenantUrl = "https://my12.digitalexperience.ibm.com/api/12345678-9abc-def0-1234-56789abcdef0";
+const baseTenantAPIURL = "https://my12.digitalexperience.ibm.com/api/12345678-9abc-def0-1234-56789abcdef0";
 
 
 #### 3. Create the "Article" content type

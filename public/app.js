@@ -1,5 +1,5 @@
 /*
- * Copyright 2016  IBM Corp.
+ * Copyright IBM Corp. 2016,2017
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
@@ -10,9 +10,10 @@
 
 "use strict";
 
-// Base URL for APIs - replace {Host} and {Tenant ID} using the values available
-// from the "i" information icon at the top left of the WCH screen
-const baseTenantUrl = "https://{Host}/api/{Tenant ID}";
+// The API URL, along with the host and content hub id for your tenant, may be
+// found in the "Hub Information" dialog off the "User menu" in the authoring UI
+// Update the following URL with the value from that Hub Information dialog.
+const baseTenantAPIURL = "https://{Host}/api/{Tenant ID}";
 
 // Empty elements for Article content type
 var emptyElements = {
@@ -46,7 +47,7 @@ var emptyElements = {
     }
 };
 
-const wchLoginURL = baseTenantUrl + "/login/v1/basicauth";
+const wchLoginURL = baseTenantAPIURL + "/login/v1/basicauth";
 const contentService = "authoring/v1/content";
 const resourceService = "authoring/v1/resources";
 const assetService = "authoring/v1/assets";
@@ -116,7 +117,7 @@ function createContentItem(contentTypeName, contentName, file, textData) {
 
 // Upload a file to create a resource. Must have done login already.
 function wchCreateResource(file) {
-    var createResourceUrl = baseTenantUrl + '/' + resourceService + "?name=" + file.name;
+    var createResourceUrl = baseTenantAPIURL + '/' + resourceService + "?name=" + file.name;
     return new Promise(function(resolve, reject) {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
@@ -147,7 +148,7 @@ function wchCreateResource(file) {
 
 // Creates an asset from a resource ID
 function wchCreateAssetFromResource(resourceId, filename) {
-    var createAssetUrl = baseTenantUrl + '/' + assetService;
+    var createAssetUrl = baseTenantAPIURL + '/' + assetService;
     var reqOptions = {
         xhrFields: {
             withCredentials: true
@@ -168,7 +169,7 @@ function wchCreateAssetFromResource(resourceId, filename) {
 // Search - callback has search results object
 function wchSearch(searchParams) {
     // console.log('searchParams: ', searchParams);
-    var searchURL = baseTenantUrl + '/' + searchService + "?" + searchParams;
+    var searchURL = baseTenantAPIURL + '/' + searchService + "?" + searchParams;
     var reqOptions = {
         xhrFields: {
             withCredentials: true
@@ -183,8 +184,8 @@ function wchSearch(searchParams) {
 
 // create content item - callback has new content item object
 function wchCreateContentItem(name, contentTypeId, contentElements) {
-    // console.log('createContentItem baseTenantUrl: ', baseTenantUrl);
-    var createContentUrl = baseTenantUrl + '/' + contentService;
+    // console.log('createContentItem baseTenantAPIURL: ', baseTenantAPIURL);
+    var createContentUrl = baseTenantAPIURL + '/' + contentService;
     var data = {
         "name": name,
         "typeId": contentTypeId,
