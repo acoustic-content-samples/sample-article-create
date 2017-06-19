@@ -39,21 +39,21 @@ You can do this right from the file system in Firefox, Chrome, or Safari browser
 
 When prompted for a username and password,  you must use an IBM id for a user associated with the Watson Content Hub tenant specified in the above baseTenantUrl.
 
-###Implementation notes
+### Implementation notes
 
-####Specifying the content type when creating a content item
+#### Specifying the content type when creating a content item
 
 The API for creating a new content items requires the ID of a content type rather than the name of the content type. In this sample the ID of the "article" type is determined by doing a search for a content type of name "article". Alternatively, if you are working with a content type that you have defined, you can code the ID directly in your application. The ID is guaranteed not to change once a content type is created.
 
-####Creating an image asset and referencing it in a content item
+#### Creating an image asset and referencing it in a content item
 Creating a new image (or other file) asset in WCH is a two-step process: first the file is uploaded to the resources service, and then the returned ID for the resource is used to create an asset. In this sample the HTML5 File object is used with XMLHttpRequest to upload the file.
 
 Once the image asset is created, the returned JSON can be used in building the element data that is used when creating a content item.
 
-####Building the elements data for the new content item
+#### Building the elements data for the new content item
 In this example, there is a hard-coded "emptyElements" structure that matches the fields and element types that the Article content type expects.
 
-####Using the helper functions for the steps in creating the content item
+#### Using the helper functions for the steps in creating the content item
 The individual API calls used in this example are broken out into separate reusable functions so that you could use them in different ways.
 
 In this sample all of the following calls are used:
@@ -73,7 +73,7 @@ And if you just want to upload a file and create a new asset you would call:
 - wchCreateAssetFromResource
 
 
-###Resources
+### Resources
 
 API Explorer reference documentation: https://developer.ibm.com/api/view/id-618
 
