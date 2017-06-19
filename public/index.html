@@ -118,7 +118,7 @@
         // Set "name" same as title
         var contentName = json["title"];
         console.log(JSON.stringify(json));
-        createContentItem('article', contentName, selectedFile, json)
+        createContentItem('(%22Sample Article%22 OR Article)', contentName, selectedFile, json)
             .then(function(json) {
                 console.log('done: ', json);
                 $("#sample-message").text("Success");
