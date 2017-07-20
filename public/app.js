@@ -211,3 +211,104 @@ function wchCreateContentItem(name, contentTypeId, contentElements) {
     });
 
 }
+
+
+// Login, upload resource, create asset, and update content item
+function updateContentItem(contentId,file, textData) {	
+	 // start with a copy of the empty elements structure for article content type
+    var elements = JSON.parse(JSON.stringify(emptyElements));	
+	if (!file) {
+        return Promise.reject('No image file specified');
+    }
+    return wchCreateResource(file) // Upload resource and create asset
+        .then(function(resourceJson) {
+            var id = resourceJson.id;
+             // Create asset using ID from resource upload
+            return wchCreateAssetFromResource(id, file.name);
+        })
+        .then(function(assetJson) {
+             // set image properties in contentElements
+            var image = elements.image;
+			
+            image.elementType = "image";
+            image.asset = {
+                id: assetJson.id
+            };
+            image.renditions["default"] = {
+                    renditionId: assetJson.renditions["default"].id
+            };
+                      
+            // update content item         
+		    return wchUpdateContentItem(contentId, textData,elements);
+        });
+};
+
+
+
+// Create a draft version of the content item,update it and change it back to ready state
+function wchUpdateContentItem(updateContentId,contentElements,imageelement) {
+	var individualContentUrl = baseTenantAPIURL + '/' + contentService + '/' +updateContentId;   
+	var createDraftUrl = individualContentUrl + '/create-draft';
+	
+	$.ajax({
+		xhrFields: {
+			withCredentials: true
+		},
+		type: "POST",
+		dataType: "json",
+		url:createDraftUrl ,
+		success: function (draftresult) {
+			$(draftresult).each(function(draftItemIndex, draftItem) {	
+			
+			var elements = JSON.parse(JSON.stringify(draftItem.elements));	
+			// Populate all the text fields in the elements
+			Object.keys(contentElements).forEach(function(key) {
+				elements[key].value = contentElements[key];				
+			});				
+			elements.image=imageelement.image;
+			var data = {
+				"elements": elements
+			};
+			draftItem.elements= elements;					
+			var postContentUrl = baseTenantAPIURL +'/'+contentService + '/'+draftItem.id;
+			$.ajax({
+						xhrFields: {
+							withCredentials: true
+						},
+						type: "PUT",
+						dataType: "json",
+						data: JSON.stringify(draftItem),			
+						url:postContentUrl ,
+						success: function (result) {											
+							$(result).each(function(index, item) {											
+								var changeToReadyStatusUrl = baseTenantAPIURL +'/'+contentService + '/'+draftItem.id +'/ready';
+								$.ajax({
+									xhrFields: {
+										withCredentials: true
+									},
+									type: "POST",
+									dataType: "json",
+									url:changeToReadyStatusUrl ,
+									success: function (updatedDate) {
+											$("#sample-message").text("Success");
+											return updatedDate;						
+									},
+									error: function () {
+										console.log("Local error callback. - POST for ready status change ");
+									},            
+								});
+								return item;
+							});								
+						},
+						error: function () {
+							console.log("Local error callback. - PUT request");
+						},            
+					});	
+			});
+		},
+		error: function () {
+			console.log("Local error callback. - draft request");
+			$("#sample-message").text("Error - Make sure the content item is in ready state for this sample.");
+		},            
+    });
+}

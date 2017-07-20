@@ -1,5 +1,5 @@
 # sample-article-create
-This is a sample of a custom web application for creating new "Article" content items with images in IBM Watson Content Hub (WCH).
+This is a sample of a custom web application for creating new "Article" content items with images in IBM Watson Content Hub (WCH). It also includes an example of how to update an existing content item which is in ready state.
 
 This sample shows:
 * Authenticating to the Watson Content Hub and calling APIs that require authentication.
@@ -33,13 +33,18 @@ Follow the instructions at the [sample-article-content](https://github.com/ibm-w
 
 For this scenario you will need to enable CORS support for your tenant. To control the CORS enablement for Watson Content Hub, go to Hub set up -> General settings -> Security tab. After adding your domain (or "*" for any domain), be sure to click the Save button at the top right of the screen.
 
-#### 5. Load index.html in a browser
+#### 5. Load index.html in a browser to test creating a new "Article" content type item
 
 You can do this right from the file system in Firefox, Chrome, or Safari browsers. Alternatively you can make the files available on any web server and open index.html in a browser using your web server URL.
 
 When prompted for a username and password,  you must use an IBM id for a user associated with the Watson Content Hub tenant specified in the above baseTenantUrl.
 
-### Implementation notes
+### 6. Similarly load index_update.html in a browser to test updating the content item
+
+You will need to enter the content item id of the content item to be updated. This can be found in the API information section of the particular content item in Watson Content Hub console 
+
+
+### Implementation notes for creating a content item
 
 #### Specifying the content type when creating a content item
 
@@ -72,6 +77,22 @@ And if you just want to upload a file and create a new asset you would call:
 - wchCreateResource
 - wchCreateAssetFromResource
 
+### Implementation notes for updating a content item
+
+#### Create a draft version of the content item to be updated via WCH API
+The API for creating a draft version of a content item requires the ID of the content item. In this sample the ID of the content item is entered as the text input. The content item id can be obtained from the Watson Content Hub console in the API information section.
+
+#### Create an image asset and update the image reference in the content item
+Creating an image asset is same as what is explained above while creating the content item. Except the created image reference is then updated in the draft content item created.
+
+#### Update the content item
+Update the values  and change the content item status back to ready. Following are the helper functions used – 
+- Login, with wchLogin
+- Upload resource, with wchCreateResource
+- Create asset from resource ID, with wchCreateAssetFromResource
+- Create a draft version of the content item, update it and change it back to ready state, with wchUpdateContentItem
+
+#### Note – Creating a draft version of the content item is only required when trying to update the content item in ready state. Creating a draft verion of the content item is not required while updating the content item in draft state.
 
 ### Resources
 
