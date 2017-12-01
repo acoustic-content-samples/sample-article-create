@@ -55,6 +55,9 @@ Creating a new image (or other file) asset in WCH is a two-step process: first t
 
 Once the image asset is created, the returned JSON can be used in building the element data that is used when creating a content item.
 
+#### Creating a "ready" content item 
+By setting the "status" field of a new content item to "ready" instead of "draft", you can create a content item that is immediately published. Note that in this case there is additional element validation that will take place. In this example you would need to have a valid date value for publishDate.
+
 #### Building the elements data for the new content item
 In this example, there is a hard-coded "emptyElements" structure that matches the fields and element types that the Article content type expects.
 
