@@ -1,5 +1,5 @@
 /*
- * Copyright IBM Corp. 2016,2017
+ * Copyright IBM Corp. 2016,2017,2018
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
@@ -214,9 +214,9 @@ function wchCreateContentItem(name, contentTypeId, contentElements) {
 
 
 // Login, upload resource, create asset, and update content item
-function updateContentItem(contentId,file, textData) {	
+function updateContentItem(contentId,file, textData) {
 	 // start with a copy of the empty elements structure for article content type
-    var elements = JSON.parse(JSON.stringify(emptyElements));	
+    var elements = JSON.parse(JSON.stringify(emptyElements));
 	if (!file) {
         return Promise.reject('No image file specified');
     }
@@ -229,7 +229,7 @@ function updateContentItem(contentId,file, textData) {
         .then(function(assetJson) {
              // set image properties in contentElements
             var image = elements.image;
-			
+
             image.elementType = "image";
             image.asset = {
                 id: assetJson.id
@@ -237,78 +237,62 @@ function updateContentItem(contentId,file, textData) {
             image.renditions["default"] = {
                     renditionId: assetJson.renditions["default"].id
             };
-                      
-            // update content item         
+
+            // update content item
 		    return wchUpdateContentItem(contentId, textData,elements);
         });
 };
 
 
 
-// Create a draft version of the content item,update it and change it back to ready state
+// Get the current version of the content item, update the fields locally and then update it in the WCH Content service via HTTP PUT
 function wchUpdateContentItem(updateContentId,contentElements,imageelement) {
-	var individualContentUrl = baseTenantAPIURL + '/' + contentService + '/' +updateContentId;   
-	var createDraftUrl = individualContentUrl + '/create-draft';
-	
+	var individualContentUrl = baseTenantAPIURL + '/' + contentService + '/' + updateContentId;
+
 	$.ajax({
 		xhrFields: {
 			withCredentials: true
 		},
-		type: "POST",
+		type: "GET",
 		dataType: "json",
-		url:createDraftUrl ,
-		success: function (draftresult) {
-			$(draftresult).each(function(draftItemIndex, draftItem) {	
-			
-			var elements = JSON.parse(JSON.stringify(draftItem.elements));	
+		url:individualContentUrl ,
+		success: function (currentContentResult) {
+			$(currentContentResult).each(function(currentItemIndex, currentContentItem) {
+
+			var elements = JSON.parse(JSON.stringify(currentContentItem.elements));
 			// Populate all the text fields in the elements
 			Object.keys(contentElements).forEach(function(key) {
-				elements[key].value = contentElements[key];				
-			});				
+				elements[key].value = contentElements[key];
+			});
 			elements.image=imageelement.image;
 			var data = {
 				"elements": elements
 			};
-			draftItem.elements= elements;					
-			var postContentUrl = baseTenantAPIURL +'/'+contentService + '/'+draftItem.id;
+			currentContentItem.elements= elements;
+			var putContentUrl = baseTenantAPIURL +'/'+contentService + '/'+currentContentItem.id;
 			$.ajax({
 						xhrFields: {
 							withCredentials: true
 						},
 						type: "PUT",
 						dataType: "json",
-						data: JSON.stringify(draftItem),			
-						url:postContentUrl ,
-						success: function (result) {											
-							$(result).each(function(index, item) {											
-								var changeToReadyStatusUrl = baseTenantAPIURL +'/'+contentService + '/'+draftItem.id +'/ready';
-								$.ajax({
-									xhrFields: {
-										withCredentials: true
-									},
-									type: "POST",
-									dataType: "json",
-									url:changeToReadyStatusUrl ,
-									success: function (updatedDate) {
-											$("#sample-message").text("Success");
-											return updatedDate;						
-									},
-									error: function () {
-										console.log("Local error callback. - POST for ready status change ");
-									},            
-								});
+						data: JSON.stringify(currentContentItem),
+						url: putContentUrl ,
+						success: function (result) {
+							$(result).each(function(index, item) {
+								$("#sample-message").text("Success");
 								return item;
-							});								
+							});
 						},
 						error: function () {
 							console.log("Local error callback. - PUT request");
-						},            
-					});	
+						},
+					});
 			});
 		},
 		error: function () {
-			console.log("Local error callback. - draft request");
-			$("#sample-message").text("Error - Make sure the content item is in ready state for this sample.");
-		},            
+			console.log("Local error callback. - get current content item request");
+			$("#sample-message").text("Error - Make sure the content item exists and is in ready state for this sample.");
+		},
     });
 }
