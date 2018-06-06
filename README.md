@@ -41,7 +41,7 @@ When prompted for a username and password,  you must use an IBM id for a user as
 
 ### 6. Similarly load index_update.html in a browser to test updating the content item
 
-You will need to enter the content item id of the content item to be updated. This can be found in the API information section of the particular content item in Watson Content Hub console 
+You will need to enter the content item id of the content item to be updated. This can be found in the API information section of the particular content item in Watson Content Hub console
 
 
 ### Implementation notes for creating a content item
@@ -55,7 +55,7 @@ Creating a new image (or other file) asset in WCH is a two-step process: first t
 
 Once the image asset is created, the returned JSON can be used in building the element data that is used when creating a content item.
 
-#### Creating a "ready" content item 
+#### Creating a "ready" content item
 By setting the "status" field of a new content item to "ready" instead of "draft", you can create a content item that is immediately published. Note that in this case there is additional element validation that will take place. In this example you would need to have a valid date value for publishDate.
 
 #### Building the elements data for the new content item
@@ -82,20 +82,20 @@ And if you just want to upload a file and create a new asset you would call:
 
 ### Implementation notes for updating a content item
 
-#### Create a draft version of the content item to be updated via WCH API
-The API for creating a draft version of a content item requires the ID of the content item. In this sample the ID of the content item is entered as the text input. The content item id can be obtained from the Watson Content Hub console in the API information section.
+#### Get the current copy of the specified content item via WCH Authoring Content API
+The API for getting the current version of a content item requires the ID of the content item. In this sample the ID of the content item is entered as the text input. The content item id can be obtained from the Watson Content Hub console in the API information section.
 
 #### Create an image asset and update the image reference in the content item
-Creating an image asset is same as what is explained above while creating the content item. Except the created image reference is then updated in the draft content item created.
+The steps to create an image asset are the same as for the article creation sample above.  A reference to the new image asset is then set in the content item being created, prior to using HTTP PUT to update the content item with the new text and image.
 
 #### Update the content item
-Update the values  and change the content item status back to ready. Following are the helper functions used – 
+Update the values in the content item and update (HTTP PUT) the content item via the WCH Authoring Content API endpoint. Following are the helper functions used from the included app.js –
 - Login, with wchLogin
 - Upload resource, with wchCreateResource
 - Create asset from resource ID, with wchCreateAssetFromResource
-- Create a draft version of the content item, update it and change it back to ready state, with wchUpdateContentItem
+- Get the current version of the content item, update it and update it via HTTP PUT to the Content service, with wchUpdateContentItem
 
-#### Note – Creating a draft version of the content item is only required when trying to update the content item in ready state. Creating a draft verion of the content item is not required while updating the content item in draft state.
+#### Note – When updating a content item for immediate publish, an existing published (status field set to ready, non-draft) content item can be updated via HTTP PUT with the content item still in the "ready" state.  If you wish to create a draft of the current ready item for the update, to be reviewed by another user in the authoring UI before publishing the changes, you would call the /authoring/v1/content/{id}/create-draft API first, to create a draft copy of the content item, then invoke the update (HTTP PUT) with the draft content item id.   That additional flow is left as an exercise for the reader.
 
 ### Resources
 
