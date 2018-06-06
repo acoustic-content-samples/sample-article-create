@@ -82,11 +82,11 @@ And if you just want to upload a file and create a new asset you would call:
 
 ### Implementation notes for updating a content item
 
-#### GET the current copy of the specified content item via WCH Authoring Content API
+#### Get the current copy of the specified content item via WCH Authoring Content API
 The API for getting the current version of a content item requires the ID of the content item. In this sample the ID of the content item is entered as the text input. The content item id can be obtained from the Watson Content Hub console in the API information section.
 
 #### Create an image asset and update the image reference in the content item
-Creating an image asset is same as what is explained above while creating the content item. Except the created image reference is then updated in the draft content item created.
+The steps to create an image asset are the same as for the article creation sample above.  A reference to the new image asset is then set in the content item being created, prior to using HTTP PUT to update the content item with the new text and image.
 
 #### Update the content item
 Update the values in the content item and update (HTTP PUT) the content item via the WCH Authoring Content API endpoint. Following are the helper functions used from the included app.js –
