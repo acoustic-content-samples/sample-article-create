@@ -30,10 +30,6 @@ var emptyElements = {
         "renditions": {},
         "asset": {}
     },
-    "publishDate": {
-        "elementType": "datetime",
-        "value": ""
-    },
     "author": {
         "elementType": "text",
         "value": ""
@@ -49,7 +45,6 @@ var emptyElements = {
 
 const wchLoginURL = baseTenantAPIURL + "/login/v1/basicauth";
 const contentService = "authoring/v1/content";
-const resourceService = "authoring/v1/resources";
 const assetService = "authoring/v1/assets";
 const searchService = "authoring/v1/search";
 
@@ -76,15 +71,9 @@ function createContentItem(contentTypeName, contentName, file, textData) {
     if (!file) {
         return Promise.reject('No image file specified');
     }
-    return wchCreateResource(file) // Upload resource and create asset
-        .then(function(resourceJson) {
-            var id = resourceJson.id;
-            // console.log("resource: ", resourceJson);
-            // 3. Create asset using ID from resource upload
-            return wchCreateAssetFromResource(id, file.name);
-        })
+    return wchCreateAssetWithResource(file) // Upload resource and create asset
         .then(function(assetJson) {
-            // console.log("asset: ", assetJson);
+            console.log("asset: ", assetJson);
             // set image properties in contentElements
             var image = elements.image;
             image.elementType = "image";
@@ -114,56 +103,40 @@ function createContentItem(contentTypeName, contentName, file, textData) {
         });
 };
 
-
-// Upload a file to create a resource. Must have done login already.
-function wchCreateResource(file) {
-    var createResourceUrl = baseTenantAPIURL + '/' + resourceService + "?name=" + file.name;
-    return new Promise(function(resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-        xhr.open("post", createResourceUrl, true);
-        xhr.setRequestHeader("Content-Type", file.type);
-        xhr.onload = function() {
-            if (this.status >= 200 && this.status < 300) {
-                console.log('OK');
-                resolve(JSON.parse(xhr.response));
-            } else {
-                console.log('bad HTTP status');
-                reject({
-                    status: this.status,
-                    statusText: xhr.statusText
-                });
-            }
-        };
-        xhr.onerror = function() {
-            console.log('error');
-            reject({
-                status: this.status,
-                statusText: xhr.statusText
-            });
-        };
-        xhr.send(file);
-    });
-}
-
-// Creates an asset from a resource ID
-function wchCreateAssetFromResource(resourceId, filename) {
-    var createAssetUrl = baseTenantAPIURL + '/' + assetService;
-    var reqOptions = {
-        xhrFields: {
-            withCredentials: true
-        },
-        dataType: "json",
-        type: "POST",
-        data: JSON.stringify({ resource: resourceId, path: '/dxdam/' + filename, name: filename }),
-        contentType: "application/json",
-        // mediaType: mimeType,
-        url: createAssetUrl
+// Creates an asset with the given resource. Must have done login already.
+function wchCreateAssetWithResource(file) {
+  var createAssetUrl = baseTenantAPIURL + '/' + assetService;
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.open("POST", createAssetUrl, true);
+    xhr.onload = function() {
+      if (this.status >= 200 && this.status < 300) {
+        console.log('OK');
+        resolve(JSON.parse(xhr.response));
+      } else {
+        console.log('bad HTTP status');
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      }
     };
+    xhr.onerror = function() {
+      console.log('error');
+      reject({
+        status: this.status,
+        statusText: xhr.statusText
+      });
+    };
+    // Construct form data
+    var data = JSON.stringify({ path: '/dxdam/' + file.name, name: file.name });
+    var formData = new FormData();
+    formData.append("resource", file, file.name);
+    formData.append("data", data);
     // Post to assets service
-    return $.ajax(reqOptions).done(function(json) {
-        return json;
-    });
+    xhr.send(formData);
+  });
 }
 
 // Search - callback has search results object
