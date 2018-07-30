@@ -66,8 +66,7 @@ The individual API calls used in this example are broken out into separate reusa
 
 In this sample all of the following calls are used:
 - Login, with wchLogin
-- Upload resource, with wchCreateResource
-- Create asset from resource ID, with wchCreateAssetFromResource
+- Upload resource and create an asset metadata object for it, with wchCreateAssetWithResource
 - Search for content type "article," with wchSearch
 - Create content item, with wchCreateContentItem
 
@@ -75,10 +74,9 @@ If, for example, you just want to create a content item with only text fields us
 - wchLogin
 - wchCreateContentItem
 
-And if you just want to upload a file and create a new asset you would call:
+And if you just want to upload a file and create a new asset with a new resource you would call:
 - wchLogin
-- wchCreateResource
-- wchCreateAssetFromResource
+- wchCreateAssetWithResource
 
 ### Implementation notes for updating a content item
 
