@@ -163,7 +163,7 @@ function wchCreateContentItem(name, contentTypeId, contentElements) {
         "name": name,
         "typeId": contentTypeId,
         "tags": [],
-        "status": "draft",
+        "status": "ready",
         "links": {},
         "elements": contentElements
     };
