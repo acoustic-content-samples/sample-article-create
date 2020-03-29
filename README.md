@@ -1,5 +1,5 @@
 # sample-article-create
-This is a sample of a custom web application for creating new "Article" content items with images in IBM Watson Content Hub (WCH). It also includes an example of how to update an existing content item which is in ready state.
+This is a sample of a custom web application for creating new "Article" content items with images in Acoustic Content (formerly Watson Content Hub or WCH). It also includes an example of how to update an existing content item which is in ready state.
 
 This sample shows:
 * Authenticating to the Watson Content Hub and calling APIs that require authentication.
