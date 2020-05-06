@@ -2,7 +2,7 @@
 This is a sample of a custom web application for creating new "Article" content items with images in Acoustic Content (formerly Watson Content Hub or WCH). It also includes an example of how to update an existing content item which is in ready state.
 
 This sample shows:
-* Authenticating to the Watson Content Hub and calling APIs that require authentication.
+* Authenticating to the Acoustic Content and calling APIs that require authentication.
 * Using the authoring services for resources, assets, and content to upload a resource, create an asset, and create an "Article" content item that includes the image.
 
 This sample can be used to create new articles that will be displayed in this earlier sample: https://github.com/ibm-wch/sample-article-carousel
@@ -95,10 +95,11 @@ Update the values in the content item and update (HTTP PUT) the content item via
 
 #### Note – When updating a content item for immediate publish, an existing published (status field set to ready, non-draft) content item can be updated via HTTP PUT with the content item still in the "ready" state.  If you wish to create a draft of the current ready item for the update, to be reviewed by another user in the authoring UI before publishing the changes, you would call the /authoring/v1/content/{id}/create-draft API first, to create a draft copy of the content item, then invoke the update (HTTP PUT) with the draft content item id.   That additional flow is left as an exercise for the reader.
 
-### Resources
+## Resources
 
-API Explorer reference documentation: https://developer.ibm.com/api/view/id-618
+Acoustic Content developer documentation: https://developer.goacoustic.com/acoustic-content/docs
 
-Watson Content Hub developer center: https://developer.ibm.com/wch/
+Acoustic Content API reference documentation: https://developer.goacoustic.com/acoustic-content/reference
 
-Watson Content Hub forum: https://developer.ibm.com/answers/smartspace/wch/
+Acoustic Content Samples Gallery: https://content-samples.goacoustic.com/
+
